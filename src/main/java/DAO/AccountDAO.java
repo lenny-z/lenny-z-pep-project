@@ -10,8 +10,8 @@ public class AccountDAO {
         Connection connection = ConnectionUtil.getConnection();
 
         try {
-            String query = "INSERT INTO account(username, password) VALUES (?, ?);";
-            PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            String sql = "INSERT INTO account(username, password) VALUES (?, ?);";
+            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, account.getUsername());
             statement.setString(2, account.getPassword());
             statement.executeUpdate();
@@ -26,5 +26,23 @@ public class AccountDAO {
         }
 
         return null;
+    }
+
+    public boolean usernameExists(String username){
+        Connection connection = ConnectionUtil.getConnection();
+
+        try{
+            String sql = "SELECT EXISTS(SELECT 1 FROM account WHERE username = ?);";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, username);
+            ResultSet resultSet = statement.executeQuery();
+
+            resultSet.first();
+            return resultSet.getBoolean(1);
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+
+        return true;
     }
 }

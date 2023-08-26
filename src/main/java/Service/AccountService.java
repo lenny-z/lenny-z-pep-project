@@ -13,4 +13,8 @@ public class AccountService {
     public Account addAccount(Account account){
         return accountDAO.insertAccount(account);
     }
+
+    public boolean usernameExists(String username){
+        return accountDAO.usernameExists(username);
+    }
 }

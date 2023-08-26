@@ -1,5 +1,6 @@
 import Controller.SocialMediaController;
 import io.javalin.Javalin;
+import DAO.AccountDAO;
 
 /**
  * This class is provided with a main method to allow you to manually run and test your application. This class will not
@@ -10,5 +11,8 @@ public class Main {
         SocialMediaController controller = new SocialMediaController();
         Javalin app = controller.startAPI();
         app.start(8080);
+        AccountDAO accountDAO = new AccountDAO();
+        System.out.println(accountDAO.usernameExists("foo"));
+        app.stop();
     }
 }
