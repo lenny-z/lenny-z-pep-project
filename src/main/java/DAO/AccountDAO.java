@@ -5,7 +5,7 @@ import Util.ConnectionUtil;
 
 import java.sql.*;
 
-public class UserDAO {
+public class AccountDAO {
     public Account insertAccount(Account account) {
         Connection connection = ConnectionUtil.getConnection();
 
