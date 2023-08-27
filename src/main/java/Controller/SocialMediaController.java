@@ -7,8 +7,10 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 import Model.Account;
+import Model.Message;
 
 import Service.AccountService;
+import Service.MessageService;
 
 /**
  * TODO: You will need to write your own endpoints and handlers for your
@@ -19,9 +21,11 @@ import Service.AccountService;
  */
 public class SocialMediaController {
     AccountService accountService;
+    MessageService messageService;
 
     public SocialMediaController() {
         accountService = new AccountService();
+        messageService = new MessageService();
     }
 
     /**
@@ -37,6 +41,7 @@ public class SocialMediaController {
         app.get("example-endpoint", this::exampleHandler);
         app.post("/register", this::postAccountHandler);
         app.post("/login", this::postLoginHandler);
+        app.post("/messages", this::postMessageHandler);
         return app;
     }
 
@@ -73,6 +78,18 @@ public class SocialMediaController {
             context.status(401);
         } else {
             context.json(mapper.writeValueAsString(selectedAccount)).status(200);
+        }
+    }
+
+    private void postMessageHandler(Context context) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Message message = mapper.readValue(context.body(), Message.class);
+        Message addedMessage = messageService.addMessage(message);
+
+        if (addedMessage == null) {
+            context.status(400);
+        } else {
+            context.json(mapper.writeValueAsString(addedMessage)).status(200);
         }
     }
 }
