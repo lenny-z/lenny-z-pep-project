@@ -53,10 +53,6 @@ public class SocialMediaController {
     private void postAccountHandler(Context context) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Account account = mapper.readValue(context.body(), Account.class);
-
-        // if (account.getUsername() != ""
-        // && account.getPassword().length() >= 4
-        // && !accountService.usernameExists(account.getUsername())) {
         Account addedAccount = accountService.addAccount(account);
 
         if (addedAccount == null) {
@@ -64,9 +60,6 @@ public class SocialMediaController {
         } else {
             context.json(mapper.writeValueAsString(addedAccount)).status(200);
         }
-        // } else {
-        // context.status(400);
-        // }
     }
 
     private void postLoginHandler(Context context) throws JsonProcessingException {

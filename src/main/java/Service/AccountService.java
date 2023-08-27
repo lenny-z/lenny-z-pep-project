@@ -20,10 +20,6 @@ public class AccountService {
         }
     }
 
-    public boolean usernameExists(String username) {
-        return accountDAO.usernameExists(username);
-    }
-
     public Account getAccountByUsernameAndPassword(String username, String password) {
         return accountDAO.selectAccountByUsernameAndPassword(username, password);
     }
