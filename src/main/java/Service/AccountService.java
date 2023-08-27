@@ -11,7 +11,13 @@ public class AccountService {
     }
 
     public Account addAccount(Account account) {
-        return accountDAO.insertAccount(account);
+        if (account.getUsername() != ""
+                && account.getPassword().length() >= 4
+                && !accountDAO.usernameExists(account.getUsername())) {
+            return accountDAO.insertAccount(account);
+        }else{
+            return null;
+        }
     }
 
     public boolean usernameExists(String username) {

@@ -36,7 +36,7 @@ public class SocialMediaController {
         Javalin app = Javalin.create();
         app.get("example-endpoint", this::exampleHandler);
         app.post("/register", this::postAccountHandler);
-        app.post("/login", this::postLoginHandler)
+        app.post("/login", this::postLoginHandler);
         return app;
     }
 
@@ -54,19 +54,19 @@ public class SocialMediaController {
         ObjectMapper mapper = new ObjectMapper();
         Account account = mapper.readValue(context.body(), Account.class);
 
-        if (account.getUsername() != ""
-                && account.getPassword().length() >= 4
-                && !accountService.usernameExists(account.getUsername())) {
-            Account addedAccount = accountService.addAccount(account);
+        // if (account.getUsername() != ""
+        // && account.getPassword().length() >= 4
+        // && !accountService.usernameExists(account.getUsername())) {
+        Account addedAccount = accountService.addAccount(account);
 
-            if (addedAccount == null) {
-                context.status(400);
-            } else {
-                context.json(mapper.writeValueAsString(addedAccount)).status(200);
-            }
-        } else {
+        if (addedAccount == null) {
             context.status(400);
+        } else {
+            context.json(mapper.writeValueAsString(addedAccount)).status(200);
         }
+        // } else {
+        // context.status(400);
+        // }
     }
 
     private void postLoginHandler(Context context) throws JsonProcessingException {

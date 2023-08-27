@@ -5,7 +5,7 @@ import Util.ConnectionUtil;
 
 import java.sql.*;
 
-public class SocialMediaDAO {
+public class MessageDAO {
     public Message insertMessage(Message message){
         Connection connection = ConnectionUtil.getConnection();
 
