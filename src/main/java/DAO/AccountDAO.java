@@ -28,21 +28,45 @@ public class AccountDAO {
         return null;
     }
 
-    public boolean usernameExists(String username){
+    public boolean usernameExists(String username) {
         Connection connection = ConnectionUtil.getConnection();
 
-        try{
+        try {
             String sql = "SELECT EXISTS(SELECT 1 FROM account WHERE username = ?);";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, username);
             ResultSet resultSet = statement.executeQuery();
 
-            resultSet.first();
-            return resultSet.getBoolean(1);
-        }catch(SQLException e){
+            if (resultSet.next()) {
+                return resultSet.getBoolean(1);
+            }
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
         return true;
+    }
+
+    public Account selectAccountByUsernameAndPassword(String username, String password) {
+        Connection connection = ConnectionUtil.getConnection();
+
+        try {
+            String sql = "SELECT * FROM account WHERE username = ? AND password = ?;";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, username);
+            statement.setString(2, password);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                return new Account(
+                        resultSet.getInt("account_id"),
+                        resultSet.getString("username"),
+                        resultSet.getString("password"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return null;
     }
 }
