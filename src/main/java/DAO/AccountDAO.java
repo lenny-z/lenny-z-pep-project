@@ -8,8 +8,6 @@ import java.sql.*;
 public class AccountDAO {
     public Account insertAccount(Account account) throws SQLException {
         Connection connection = ConnectionUtil.getConnection();
-
-        // try {
         String sql = "INSERT INTO account(username, password) VALUES (?, ?);";
         PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         statement.setString(1, account.getUsername());
@@ -23,17 +21,10 @@ public class AccountDAO {
         } else {
             throw new SQLException();
         }
-        // } catch (SQLException e) {
-        // System.out.println(e.getMessage());
-        // }
-
-        // return null;
     }
 
     public boolean usernameExists(String username) throws SQLException {
         Connection connection = ConnectionUtil.getConnection();
-
-        // try {
         String sql = "SELECT EXISTS(SELECT 1 FROM account WHERE username = ?);";
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setString(1, username);
@@ -44,11 +35,6 @@ public class AccountDAO {
         } else {
             throw new SQLException();
         }
-        // } catch (SQLException e) {
-        // System.out.println(e.getMessage());
-        // }
-
-        // return true;
     }
 
     public boolean accountIDExists(int accountID) {
@@ -70,25 +56,25 @@ public class AccountDAO {
         return true;
     }
 
-    public Account selectAccountByUsernameAndPassword(String username, String password) {
+    public Account selectAccountByUsernameAndPassword(String username, String password) throws SQLException {
         Connection connection = ConnectionUtil.getConnection();
 
-        try {
-            String sql = "SELECT * FROM account WHERE username = ? AND password = ?;";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, username);
-            statement.setString(2, password);
-            ResultSet resultSet = statement.executeQuery();
+        // try {
+        String sql = "SELECT * FROM account WHERE username = ? AND password = ?;";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, username);
+        statement.setString(2, password);
+        ResultSet resultSet = statement.executeQuery();
 
-            if (resultSet.next()) {
-                return new Account(
-                        resultSet.getInt("account_id"),
-                        resultSet.getString("username"),
-                        resultSet.getString("password"));
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        if (resultSet.next()) {
+            return new Account(
+                    resultSet.getInt("account_id"),
+                    resultSet.getString("username"),
+                    resultSet.getString("password"));
         }
+        // } catch (SQLException e) {
+        // System.out.println(e.getMessage());
+        // }
 
         return null;
     }

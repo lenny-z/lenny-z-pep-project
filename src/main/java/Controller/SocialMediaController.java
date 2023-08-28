@@ -87,13 +87,17 @@ public class SocialMediaController {
         ObjectMapper mapper = new ObjectMapper();
         Account account = mapper.readValue(context.body(), Account.class);
 
-        Account selectedAccount = accountService.getAccountByUsernameAndPassword(account.getUsername(),
-                account.getPassword());
+        try {
+            Account selectedAccount = accountService.getAccountByUsernameAndPassword(account.getUsername(),
+                    account.getPassword());
 
-        if (selectedAccount == null) {
+            if (selectedAccount == null) {
+                context.status(401);
+            } else {
+                context.json(mapper.writeValueAsString(selectedAccount)).status(200);
+            }
+        } catch (SQLException e) {
             context.status(401);
-        } else {
-            context.json(mapper.writeValueAsString(selectedAccount)).status(200);
         }
     }
 
