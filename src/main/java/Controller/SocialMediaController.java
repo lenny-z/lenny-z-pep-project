@@ -2,6 +2,7 @@ package Controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -11,9 +12,9 @@ import Model.Message;
 
 import Service.AccountService;
 import Service.MessageService;
-import Service.UserErrorException;
 
 import java.util.List;
+import java.util.Map;
 import java.sql.SQLException;
 
 /**
@@ -129,15 +130,19 @@ public class SocialMediaController {
     }
 
     private void updateMessageByIDHandler(Context context) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
         int id = Integer.parseInt(context.pathParam("message_id"));
-        String messageText = context.body();
 
-        try {
-            context.json(messageService.updateMessageByID(id, messageText)).status(200);
-        } catch (SQLException e) {
+        Map<String, String> messageMap = mapper.readValue(context.body(), new TypeReference<Map<String, String>>() {
+        });
+
+        String messageText = messageMap.get("message_text");
+        Message message = messageService.updateMessageByID(id, messageText);
+
+        if (message == null) {
             context.status(400);
-        } catch (UserErrorException e) {
-            context.status(400);
+        } else {
+            context.json(message).status(200);
         }
     }
 }
