@@ -59,7 +59,6 @@ public class AccountDAO {
     public Account selectAccountByUsernameAndPassword(String username, String password) throws SQLException {
         Connection connection = ConnectionUtil.getConnection();
 
-        // try {
         String sql = "SELECT * FROM account WHERE username = ? AND password = ?;";
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setString(1, username);
@@ -72,9 +71,6 @@ public class AccountDAO {
                     resultSet.getString("username"),
                     resultSet.getString("password"));
         }
-        // } catch (SQLException e) {
-        // System.out.println(e.getMessage());
-        // }
 
         return null;
     }

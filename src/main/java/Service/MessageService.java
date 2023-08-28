@@ -6,6 +6,8 @@ import DAO.AccountDAO;
 
 import java.util.List;
 
+import java.sql.SQLException;
+
 public class MessageService {
     MessageDAO messageDAO;
     AccountDAO accountDAO;
@@ -24,12 +26,15 @@ public class MessageService {
         return isValid(messageText);
     }
 
-    public Message addMessage(Message message) {
-        if (isValid(message) && accountDAO.accountIDExists(message.getPosted_by())) {
+    public Message addMessage(Message message) throws SQLException, UserErrorException {
+        // if (isValid(message) && accountDAO.accountIDExists(message.getPosted_by())) {
+        if (isValid(message)) {
             return messageDAO.insertMessage(message);
+        } else {
+            throw new UserErrorException();
         }
 
-        return null;
+        // return null;
     }
 
     public List<Message> getAllMessages() {
@@ -52,7 +57,7 @@ public class MessageService {
         return null;
     }
 
-    public List<Message> getMessagesByAccountID(int id){
+    public List<Message> getMessagesByAccountID(int id) {
         return messageDAO.selectMessagesByAccountID(id);
     }
 }

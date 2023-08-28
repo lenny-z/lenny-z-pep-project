@@ -104,12 +104,17 @@ public class SocialMediaController {
     private void postMessageHandler(Context context) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Message message = mapper.readValue(context.body(), Message.class);
-        Message addedMessage = messageService.addMessage(message);
 
-        if (addedMessage == null) {
-            context.status(400);
-        } else {
+        try {
+            Message addedMessage = messageService.addMessage(message);
+
+            // if (addedMessage == null) {
+            // context.status(400);
+            // } else {
             context.json(mapper.writeValueAsString(addedMessage)).status(200);
+            // }
+        } catch (SQLException | UserErrorException e) {
+            context.status(400);
         }
     }
 
