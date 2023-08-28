@@ -28,4 +28,8 @@ public class MessageService {
     public List<Message> getAllMessages(){
         return messageDAO.selectAllMessages();
     }
+
+    public Message getMessageByID(int id){
+        return messageDAO.selectMessageByID(id);
+    }
 }
