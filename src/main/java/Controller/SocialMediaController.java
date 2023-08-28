@@ -15,6 +15,7 @@ import Service.MessageService;
 import Service.UserErrorException;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.sql.SQLException;
 
@@ -72,11 +73,7 @@ public class SocialMediaController {
 
         try {
             Account addedAccount = accountService.addAccount(account);
-            if (addedAccount == null) {
-                context.status(400);
-            } else {
-                context.json(mapper.writeValueAsString(addedAccount)).status(200);
-            }
+            context.json(mapper.writeValueAsString(addedAccount)).status(200);
         } catch (SQLException | UserErrorException e) {
             context.status(400);
         }
@@ -107,20 +104,18 @@ public class SocialMediaController {
 
         try {
             Message addedMessage = messageService.addMessage(message);
-
-            // if (addedMessage == null) {
-            // context.status(400);
-            // } else {
             context.json(mapper.writeValueAsString(addedMessage)).status(200);
-            // }
         } catch (SQLException | UserErrorException e) {
             context.status(400);
         }
     }
 
     private void getMessagesHandler(Context context) throws JsonProcessingException {
-        List<Message> messages = messageService.getAllMessages();
-        context.json(messages).status(200);
+        try {
+            context.json(messageService.getAllMessages()).status(200);
+        } catch (SQLException e) {
+            context.json(new ArrayList<Message>()).status(200);
+        }
     }
 
     private void getMessageByIDHandler(Context context) throws JsonProcessingException {

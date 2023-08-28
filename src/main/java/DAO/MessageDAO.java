@@ -11,7 +11,6 @@ public class MessageDAO {
     public Message insertMessage(Message message) throws SQLException {
         Connection connection = ConnectionUtil.getConnection();
 
-        // try {
         String sql = "INSERT INTO message(posted_by, message_text, time_posted_epoch)"
                 + "VALUES (?, ?, ?);";
 
@@ -24,39 +23,35 @@ public class MessageDAO {
 
         if (resultSet.next()) {
             int messageID = (int) resultSet.getLong(1);
+
             return new Message(messageID, message.getPosted_by(), message.getMessage_text(),
                     message.getTime_posted_epoch());
         } else {
             throw new SQLException();
         }
-        // } catch (SQLException e) {
-        // System.out.println(e.getMessage());
-        // }
-
-        // return null;
     }
 
-    public List<Message> selectAllMessages() {
+    public List<Message> selectAllMessages() throws SQLException {
         Connection connection = ConnectionUtil.getConnection();
         List<Message> messages = new ArrayList<>();
 
-        try {
-            String sql = "SELECT * FROM message;";
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
+        // try {
+        String sql = "SELECT * FROM message;";
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
 
-            while (resultSet.next()) {
-                Message message = new Message(
-                        resultSet.getInt(1),
-                        resultSet.getInt(2),
-                        resultSet.getString(3),
-                        resultSet.getLong(4));
+        while (resultSet.next()) {
+            Message message = new Message(
+                    resultSet.getInt(1),
+                    resultSet.getInt(2),
+                    resultSet.getString(3),
+                    resultSet.getLong(4));
 
-                messages.add(message);
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            messages.add(message);
         }
+        // } catch (SQLException e) {
+        // System.out.println(e.getMessage());
+        // }
 
         return messages;
     }

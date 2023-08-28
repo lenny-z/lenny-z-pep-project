@@ -27,17 +27,14 @@ public class MessageService {
     }
 
     public Message addMessage(Message message) throws SQLException, UserErrorException {
-        // if (isValid(message) && accountDAO.accountIDExists(message.getPosted_by())) {
         if (isValid(message)) {
             return messageDAO.insertMessage(message);
         } else {
             throw new UserErrorException();
         }
-
-        // return null;
     }
 
-    public List<Message> getAllMessages() {
+    public List<Message> getAllMessages() throws SQLException{
         return messageDAO.selectAllMessages();
     }
 
