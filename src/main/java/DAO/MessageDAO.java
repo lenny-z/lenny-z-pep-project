@@ -88,18 +88,15 @@ public class MessageDAO {
         Connection connection = ConnectionUtil.getConnection();
 
         try {
-            String sql = "DELETE FROM message WHERE message_id = ?;";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, id);
-            ResultSet resultSet = statement.executeQuery();
+            Message message = selectMessageByID(id);
 
-            if (resultSet.next()) {
-                Message message = new Message(
-                        resultSet.getInt(1),
-                        resultSet.getInt(2),
-                        resultSet.getString(3),
-                        resultSet.getLong(4));
-
+            if (message == null) {
+                return null;
+            } else {
+                String sql = "DELETE FROM message WHERE message_id = ?;";
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setInt(1, id);
+                statement.executeUpdate();
                 return message;
             }
         } catch (SQLException e) {
