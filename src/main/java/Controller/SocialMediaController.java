@@ -12,6 +12,7 @@ import Model.Message;
 
 import Service.AccountService;
 import Service.MessageService;
+import Service.UserErrorException;
 
 import java.util.List;
 import java.util.Map;
@@ -68,13 +69,18 @@ public class SocialMediaController {
     private void postAccountHandler(Context context) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Account account = mapper.readValue(context.body(), Account.class);
-        Account addedAccount = accountService.addAccount(account);
 
-        if (addedAccount == null) {
+        try {
+            Account addedAccount = accountService.addAccount(account);
+            if (addedAccount == null) {
+                context.status(400);
+            } else {
+                context.json(mapper.writeValueAsString(addedAccount)).status(200);
+            }
+        } catch (SQLException | UserErrorException e) {
             context.status(400);
-        } else {
-            context.json(mapper.writeValueAsString(addedAccount)).status(200);
         }
+
     }
 
     private void postLoginHandler(Context context) throws JsonProcessingException {
