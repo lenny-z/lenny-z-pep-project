@@ -11,8 +11,10 @@ import Model.Message;
 
 import Service.AccountService;
 import Service.MessageService;
+import Service.UserErrorException;
 
 import java.util.List;
+import java.sql.SQLException;
 
 /**
  * TODO: You will need to write your own endpoints and handlers for your
@@ -47,6 +49,7 @@ public class SocialMediaController {
         app.get("/messages", this::getMessagesHandler);
         app.get("/messages/{message_id}", this::getMessageByIDHandler);
         app.delete("/messages/{message_id}", this::deleteMessageByIDHandler);
+        app.patch("/messages/{message_id}", this::updateMessageByIDHandler);
         return app;
     }
 
@@ -122,6 +125,19 @@ public class SocialMediaController {
             context.status(200);
         } else {
             context.json(message).status(200);
+        }
+    }
+
+    private void updateMessageByIDHandler(Context context) throws JsonProcessingException {
+        int id = Integer.parseInt(context.pathParam("message_id"));
+        String messageText = context.body();
+
+        try {
+            context.json(messageService.updateMessageByID(id, messageText)).status(200);
+        } catch (SQLException e) {
+            context.status(400);
+        } catch (UserErrorException e) {
+            context.status(400);
         }
     }
 }
