@@ -22,8 +22,7 @@ public class MessageService {
     }
 
     private boolean isValid(Message message) {
-        String messageText = message.getMessage_text();
-        return isValid(messageText);
+        return isValid(message.getMessage_text());
     }
 
     public Message addMessage(Message message) throws SQLException, UserErrorException {
@@ -52,8 +51,6 @@ public class MessageService {
         } else {
             throw new UserErrorException();
         }
-
-        // return null;
     }
 
     public List<Message> getMessagesByAccountID(int id) throws SQLException {

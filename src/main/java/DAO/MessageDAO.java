@@ -53,8 +53,6 @@ public class MessageDAO {
 
     public Message selectMessageByID(int id) throws SQLException {
         Connection connection = ConnectionUtil.getConnection();
-
-        // try {
         String sql = "SELECT * FROM message WHERE message_id = ?;";
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setInt(1, id);
@@ -69,17 +67,12 @@ public class MessageDAO {
 
             return message;
         }
-        // } catch (SQLException e) {
-        // System.out.println(e.getMessage());
-        // }
 
         return null;
     }
 
     public Message deleteMessageByID(int id) throws SQLException {
         Connection connection = ConnectionUtil.getConnection();
-
-        // try {
         Message message = selectMessageByID(id);
 
         if (message == null) {
@@ -91,35 +84,21 @@ public class MessageDAO {
             statement.executeUpdate();
             return message;
         }
-        // } catch (SQLException e) {
-        // System.out.println(e.getMessage());
-        // }
-
-        // return null;
     }
 
     public Message updateMessageByID(int id, String messageText) throws SQLException {
         Connection connection = ConnectionUtil.getConnection();
-
-        // try {
         String sql = "UPDATE message SET message_text = ? WHERE message_id = ?";
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setString(1, messageText);
         statement.setInt(2, id);
         statement.executeUpdate();
         return selectMessageByID(id);
-        // } catch (SQLException e) {
-        // System.out.println(e.getMessage());
-        // }
-
-        // return null;
     }
 
     public List<Message> selectMessagesByAccountID(int id) throws SQLException {
         Connection connection = ConnectionUtil.getConnection();
         List<Message> messages = new ArrayList<>();
-
-        // try {
         String sql = "SELECT * FROM message WHERE posted_by = ?;";
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setInt(1, id);
@@ -134,9 +113,6 @@ public class MessageDAO {
 
             messages.add(message);
         }
-        // } catch (SQLException e) {
-        // System.out.println(e.getMessage());
-        // }
 
         return messages;
     }

@@ -37,25 +37,6 @@ public class AccountDAO {
         }
     }
 
-    // public boolean accountIDExists(int accountID) {
-    //     Connection connection = ConnectionUtil.getConnection();
-
-    //     try {
-    //         String sql = "SELECT EXISTS(SELECT 1 FROM account WHERE account_id = ?);";
-    //         PreparedStatement statement = connection.prepareStatement(sql);
-    //         statement.setInt(1, accountID);
-    //         ResultSet resultSet = statement.executeQuery();
-
-    //         if (resultSet.next()) {
-    //             return resultSet.getBoolean(1);
-    //         }
-    //     } catch (SQLException e) {
-    //         System.out.println(e.getMessage());
-    //     }
-
-    //     return true;
-    // }
-
     public Account selectAccountByUsernameAndPassword(String username, String password) throws SQLException {
         Connection connection = ConnectionUtil.getConnection();
 

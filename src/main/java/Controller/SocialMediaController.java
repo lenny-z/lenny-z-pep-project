@@ -73,7 +73,7 @@ public class SocialMediaController {
 
         try {
             Account addedAccount = accountService.addAccount(account);
-            context.json(mapper.writeValueAsString(addedAccount)).status(200);
+            context.json(addedAccount).status(200);
         } catch (SQLException | UserErrorException e) {
             context.status(400);
         }
@@ -91,7 +91,7 @@ public class SocialMediaController {
             if (selectedAccount == null) {
                 context.status(401);
             } else {
-                context.json(mapper.writeValueAsString(selectedAccount)).status(200);
+                context.json(selectedAccount).status(200);
             }
         } catch (SQLException e) {
             context.status(401);
@@ -104,7 +104,7 @@ public class SocialMediaController {
 
         try {
             Message addedMessage = messageService.addMessage(message);
-            context.json(mapper.writeValueAsString(addedMessage)).status(200);
+            context.json(addedMessage).status(200);
         } catch (SQLException | UserErrorException e) {
             context.status(400);
         }
