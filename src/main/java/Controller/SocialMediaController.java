@@ -120,23 +120,32 @@ public class SocialMediaController {
 
     private void getMessageByIDHandler(Context context) throws JsonProcessingException {
         int id = Integer.parseInt(context.pathParam("message_id"));
-        Message message = messageService.getMessageByID(id);
 
-        if (message == null) {
+        try {
+            Message message = messageService.getMessageByID(id);
+
+            if (message == null) {
+                context.status(200);
+            } else {
+                context.json(message).status(200);
+            }
+        } catch (SQLException e) {
             context.status(200);
-        } else {
-            context.json(message).status(200);
         }
     }
 
     private void deleteMessageByIDHandler(Context context) throws JsonProcessingException {
         int id = Integer.parseInt(context.pathParam("message_id"));
-        Message message = messageService.deleteMessageByID(id);
+        try {
+            Message message = messageService.deleteMessageByID(id);
 
-        if (message == null) {
+            if (message == null) {
+                context.status(200);
+            } else {
+                context.json(message).status(200);
+            }
+        } catch (SQLException e) {
             context.status(200);
-        } else {
-            context.json(message).status(200);
         }
     }
 
@@ -148,17 +157,28 @@ public class SocialMediaController {
         });
 
         String messageText = messageMap.get("message_text");
-        Message message = messageService.updateMessageByID(id, messageText);
 
-        if (message == null) {
+        try {
+            Message message = messageService.updateMessageByID(id, messageText);
+
+            if (message == null) {
+                context.status(400);
+            } else {
+                context.json(message).status(200);
+            }
+        } catch (SQLException | UserErrorException e) {
             context.status(400);
-        } else {
-            context.json(message).status(200);
         }
+
     }
 
     private void getMessagesByAccountIDHandler(Context context) throws JsonProcessingException {
         int id = Integer.parseInt(context.pathParam("account_id"));
-        context.json(messageService.getMessagesByAccountID(id)).status(200);
+
+        try {
+            context.json(messageService.getMessagesByAccountID(id)).status(200);
+        } catch (SQLException e) {
+            context.json(new ArrayList<Message>()).status(200);
+        }
     }
 }

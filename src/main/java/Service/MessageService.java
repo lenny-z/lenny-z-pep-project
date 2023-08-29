@@ -34,27 +34,29 @@ public class MessageService {
         }
     }
 
-    public List<Message> getAllMessages() throws SQLException{
+    public List<Message> getAllMessages() throws SQLException {
         return messageDAO.selectAllMessages();
     }
 
-    public Message getMessageByID(int id) {
+    public Message getMessageByID(int id) throws SQLException {
         return messageDAO.selectMessageByID(id);
     }
 
-    public Message deleteMessageByID(int id) {
+    public Message deleteMessageByID(int id) throws SQLException {
         return messageDAO.deleteMessageByID(id);
     }
 
-    public Message updateMessageByID(int id, String messageText) {
+    public Message updateMessageByID(int id, String messageText) throws SQLException, UserErrorException {
         if (isValid(messageText)) {
             return messageDAO.updateMessageByID(id, messageText);
+        } else {
+            throw new UserErrorException();
         }
 
-        return null;
+        // return null;
     }
 
-    public List<Message> getMessagesByAccountID(int id) {
+    public List<Message> getMessagesByAccountID(int id) throws SQLException {
         return messageDAO.selectMessagesByAccountID(id);
     }
 }
